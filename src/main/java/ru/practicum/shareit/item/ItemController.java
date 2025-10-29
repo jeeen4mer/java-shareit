@@ -16,10 +16,12 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
+    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto createItem(@Valid @RequestBody CreateItemDto createItemDto,
-                              @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+                              @RequestHeader(USER_ID_HEADER) Long ownerId) {
         return itemService.createItem(createItemDto, ownerId);
     }
 
@@ -29,14 +31,14 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getItemsByOwnerId(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public List<ItemDto> getItemsByOwnerId(@RequestHeader(USER_ID_HEADER) Long ownerId) {
         return itemService.getItemsByOwnerId(ownerId);
     }
 
     @PatchMapping("/{id}")
     public ItemDto updateItem(@PathVariable Long id,
                               @RequestBody UpdateItemDto updateItemDto,
-                              @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+                              @RequestHeader(USER_ID_HEADER) Long ownerId) {
         return itemService.updateItem(id, updateItemDto, ownerId);
     }
 
@@ -47,7 +49,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam String text) {
+    public List<ItemDto> searchItems(@RequestParam(required = false) String text) {
         return itemService.searchItems(text);
     }
 }
