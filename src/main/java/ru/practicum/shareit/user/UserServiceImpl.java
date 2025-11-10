@@ -59,13 +59,13 @@ public class UserServiceImpl implements UserService {
             existingUser.setEmail(userDto.getEmail());
         }
 
-        User updatedUser = userRepository.update(existingUser);
+        User updatedUser = userRepository.save(existingUser);
         return UserMapper.toUserDto(updatedUser);
     }
 
     @Override
     public void deleteUser(Long id) {
-        if (!userRepository.findById(id).isPresent()) {
+        if (!userRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден");
         }
         userRepository.deleteById(id);
