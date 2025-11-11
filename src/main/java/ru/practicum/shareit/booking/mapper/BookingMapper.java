@@ -16,7 +16,7 @@ public class BookingMapper {
                 booking.getBooker().getName()
         );
 
-        BookingDto.Item item = new BookingDto.Item(
+        BookingDto.BookingItem item = new BookingDto.BookingItem(
                 booking.getItem().getId(),
                 booking.getItem().getName()
         );
