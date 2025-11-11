@@ -30,11 +30,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, BookingStatus status, Pageable pageable);
 
-    @Query("SELECT b FROM Booking b WHERE b.item.id = :itemId AND b.status = 'APPROVED' " +
+    @Query("SELECT b FROM Booking b JOIN FETCH b.booker JOIN FETCH b.item WHERE b.item.id = :itemId AND b.status = 'APPROVED' " +
             "AND b.end > :now ORDER BY b.start ASC")
     List<Booking> findNextBooking(Long itemId, LocalDateTime now);
 
-    @Query("SELECT b FROM Booking b WHERE b.item.id = :itemId AND b.status = 'APPROVED' " +
+    @Query("SELECT b FROM Booking b JOIN FETCH b.booker JOIN FETCH b.item WHERE b.item.id = :itemId AND b.status = 'APPROVED' " +
             "AND b.end < :now ORDER BY b.end DESC")
     List<Booking> findLastBooking(Long itemId, LocalDateTime now);
 
