@@ -23,7 +23,8 @@ public class ItemMapper {
                 createItemDto.getName(),
                 createItemDto.getDescription(),
                 createItemDto.getAvailable(),
-                ownerId
+                ownerId,
+                createItemDto.getRequestId()
         );
     }
 }

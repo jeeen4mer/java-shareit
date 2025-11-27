@@ -19,4 +19,6 @@ public class CreateItemDto {
 
     @NotNull(message = "Статус доступности не может быть null")
     private Boolean available;
+
+    private Long requestId;
 }
