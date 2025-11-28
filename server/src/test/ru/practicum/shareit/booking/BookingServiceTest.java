@@ -148,7 +148,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void getBookingById_WhenBookingNotFound_ShouldThrowException() {
+    void getBookingById_WhenBookingNotFound_ShouldThrowException()  {
         Long bookingId = 1L;
         Long userId = 1L;
 
