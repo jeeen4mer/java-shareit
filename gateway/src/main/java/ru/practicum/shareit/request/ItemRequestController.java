@@ -1,44 +1,55 @@
-package ru.practicum.shareit.request;
+ package ru.practicum.shareit.request;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
-import ru.practicum.shareit.request.dto.CreateItemRequestDto;
+ import lombok.RequiredArgsConstructor;
+ import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-import java.util.List;
+ import jakarta.validation.Valid;
+ import ru.practicum.shareit.request.dto.CreateItemRequestDto;
+ import ru.practicum.shareit.request.dto.ItemRequestDto;
+ import ru.practicum.shareit.request.service.ItemRequestService;
 
-@RestController
-@RequestMapping(path = "/requests")
-@RequiredArgsConstructor
-public class ItemRequestController {
-    private final ItemRequestService itemRequestService;
+ import java.util.List;
 
-    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
+ @RestController
+ @RequestMapping(path = "/requests")
+ @RequiredArgsConstructor
+ public class ItemRequestController {
+     private final ItemRequestService itemRequestService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ItemRequestDto createRequest(@Valid @RequestBody CreateItemRequestDto createItemRequestDto,
-                                        @RequestHeader(USER_ID_HEADER) Long userId) {
-        return itemRequestService.createRequest(createItemRequestDto, userId);
-    }
+     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
-    @GetMapping
-    public List<ItemRequestDto> getUserRequests(@RequestHeader(USER_ID_HEADER) Long userId) {
-        return itemRequestService.getUserRequests(userId);
-    }
-
-    @GetMapping("/all")
-    public List<ItemRequestDto> getOtherUsersRequests(@RequestHeader(USER_ID_HEADER) Long userId,
-                                                      @RequestParam(defaultValue = "0") int from,
-                                                      @RequestParam(defaultValue = "10") int size) {
-        return itemRequestService.getOtherUsersRequests(userId, from, size);
-    }
-
-    @GetMapping("/{requestId}")
-    public ItemRequestDto getRequestById(@PathVariable Long requestId,
+     @PostMapping
+     @ResponseStatus(HttpStatus.CREATED)
+     public ItemRequestDto createRequest(@Valid @RequestBody CreateItemRequestDto createItemRequestDto,
                                          @RequestHeader(USER_ID_HEADER) Long userId) {
-        return itemRequestService.getRequestById(requestId, userId);
-    }
-}
+         return itemRequestService.createRequest(createItemRequestDto, userId);
+     }
+
+     @GetMapping
+     public List<ItemRequestDto> getUserRequests(@RequestHeader(USER_ID_HEADER) Long userId) {
+         return itemRequestService.getUserRequests(userId);
+     }
+
+     @GetMapping("/all")
+     public List<ItemRequestDto> getOtherUsersRequests(@RequestHeader(USER_ID_HEADER) Long userId,
+                                                       @RequestParam(defaultValue = "0") int from,
+                                                       @RequestParam(defaultValue = "10") int size) {
+         return itemRequestService.getOtherUsersRequests(userId, from, size);
+     }
+
+     @GetMapping("/{requestId}")
+     public ItemRequestDto getRequestById(@PathVariable Long requestId,
+                                          @RequestHeader(USER_ID_HEADER) Long userId) {
+         return itemRequestService.getRequestById(requestId, userId);
+     }
+
+     @ExceptionHandler(RuntimeException.class)
+     public ResponseEntity<String> handleRequestNotFoundException(RuntimeException ex) {
+         if ("Request not found".equals(ex.getMessage())) {
+             return ResponseEntity.notFound().build();
+         }
+         return ResponseEntity.internalServerError().build();
+     }
+ }

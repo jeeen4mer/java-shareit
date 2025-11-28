@@ -7,6 +7,8 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.CreateUserDto;
 
 import jakarta.validation.Valid;
+import ru.practicum.shareit.user.service.UserService;
+
 import java.util.List;
 
 @RestController

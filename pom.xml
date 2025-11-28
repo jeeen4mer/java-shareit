@@ -27,6 +27,7 @@
     <modules>
         <module>gateway</module>
         <module>server</module>
+        <module>common</module>
     </modules>
 
     <build>
@@ -74,13 +75,6 @@
                             <phase>compile</phase>
                         </execution>
                     </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>${checkstyle.version}</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
@@ -174,16 +168,6 @@
         <profile>
             <id>check</id>
             <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
             </build>
         </profile>
     </profiles>

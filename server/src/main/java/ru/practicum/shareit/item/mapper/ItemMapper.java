@@ -11,8 +11,6 @@ public class ItemMapper {
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                null,
-                null,
                 null
         );
     }

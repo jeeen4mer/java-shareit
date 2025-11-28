@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
 
