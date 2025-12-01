@@ -1,19 +1,17 @@
 package ru.practicum.shareit.user.mapper;
 
-import ru.practicum.shareit.user.User;
+
+import org.mapstruct.Mapper;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.CreateUserDto;
+import ru.practicum.shareit.user.model.User;
 
-public class UserMapper {
-    public static UserDto toUserDto(User user) {
-        return new UserDto(user.getId(), user.getName(), user.getEmail());
-    }
+import java.util.List;
 
-    public static User toUser(CreateUserDto createUserDto) {
-        return new User(null, createUserDto.getName(), createUserDto.getEmail());
-    }
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    UserDto toUserDto(User user);
 
-    public static User toUser(UserDto userDto) {
-        return new User(userDto.getId(), userDto.getName(), userDto.getEmail());
-    }
+    User fromUserDto(UserDto userDto);
+
+    List<UserDto> toUserDtoList(List<User> users);
 }
