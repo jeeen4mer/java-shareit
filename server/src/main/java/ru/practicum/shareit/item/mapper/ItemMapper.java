@@ -1,26 +1,64 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import ru.practicum.shareit.item.dto.ItemRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.dto.BookingShortDto;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemWithBookingsDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
-public interface ItemMapper {
+public final class ItemMapper {
+    private ItemMapper() {
+    }
 
-    @Mapping(source = "ownerId", target = "owner.id")
-    Item toItemFromRequest(ItemRequestDto requestDto);
+    public static ItemDto toItemDto(Item item) {
+        return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(item.getRequest() != null ? item.getRequest().getId() : null)
+                .build();
+    }
 
-    ItemResponseDto toItemResponseDto(Item item);
+    public static ItemWithBookingsDto toItemWithBookingsDto(
+            Item item,
+            BookingShortDto lastBooking,
+            BookingShortDto nextBooking,
+            List<CommentDto> comments) {
 
-    List<ItemResponseDto> toItemResponseListDto(List<Item> items);
+        return ItemWithBookingsDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(item.getRequest() != null ? item.getRequest().getId() : null)
+                .lastBooking(lastBooking)
+                .nextBooking(nextBooking)
+                .comments(comments)
+                .build();
+    }
 
-    ItemWithBookingsDto toItemWithBookingsDto(Item item);
+    public static BookingShortDto toBookingShortDto(Booking booking) {
+        if (booking == null) return null;
+        return BookingShortDto.builder()
+                .id(booking.getId())
+                .bookerId(booking.getBooker().getId())
+                .build();
+    }
 
-    List<ItemWithBookingsDto> toItemWithBookingsListDto(List<Item> items);
+
+    public static CommentDto toCommentDto(Comment comment) {
+        return CommentDto.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .authorName(comment.getAuthor().getName())
+                .created(comment.getCreated())
+                .build();
+    }
+
 
 }

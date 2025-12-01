@@ -1,25 +1,31 @@
 package ru.practicum.shareit.booking.mapper;
 
-
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 
-import java.util.List;
+public final class BookingMapper {
+    private BookingMapper() {
+    }
 
-@Mapper(componentModel = "spring")
-public interface BookingMapper {
-    @Mapping(source = "bookerId", target = "booker.id")
-    @Mapping(source = "itemId", target = "item.id")
-    Booking toBooking(BookingRequestDto bookingRequestDto);
+    public static BookingDto toBookingDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
 
-    BookingResponseDto toBookingResponseDto(Booking booking);
+        BookingDto.ItemDto itemDto = new BookingDto.ItemDto();
+        itemDto.setId(booking.getItem().getId());
+        itemDto.setName(booking.getItem().getName());
 
-    List<BookingResponseDto> toBookingResponseListDto(List<Booking> bookings);
+        BookingDto.UserDto bookerDto = new BookingDto.UserDto();
+        bookerDto.setId(booking.getBooker().getId());
 
-    @Mapping(source = "booker.id", target = "bookerId")
-    BookingShortDto toBookingShortDtoFromResponse(BookingResponseDto bookingResponseDto);
+        return BookingDto.builder()
+                .id(booking.getId())
+                .start(booking.getStart())
+                .end(booking.getEnd())
+                .item(itemDto)
+                .booker(bookerDto)
+                .status(booking.getStatus())
+                .build();
+    }
 }

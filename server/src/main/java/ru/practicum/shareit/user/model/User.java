@@ -1,26 +1,25 @@
 package ru.practicum.shareit.user.model;
 
-
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
-    @Size(min = 1, max = 20)
     private String name;
-    @Column(unique = true, nullable = false)
+
+    @Column(nullable = false, length = 512, unique = true)
     private String email;
 }

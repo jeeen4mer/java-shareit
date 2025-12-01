@@ -1,33 +1,40 @@
 package ru.practicum.shareit.request.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
-import javax.persistence.*;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(name = "requests")
-@Builder(toBuilder = true)
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Positive
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
-    @Column(nullable = false)
-    @Size(min = 1, max = 50)
-    private String description;
-    @JoinColumn(name = "owner_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private User requester;
-    @Column(nullable = false)
-    private LocalDateTime created;
 
+    @Column(nullable = false, length = 1024)
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requestor_id", nullable = false)
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private User requestor;
+
+    @Column(nullable = false)
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private LocalDateTime created;
 }
