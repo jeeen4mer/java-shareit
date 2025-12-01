@@ -163,8 +163,7 @@ public class ItemServiceImpl implements ItemService {
                 .anyMatch(b -> {
                     boolean isBooker = b.getBooker().getId().equals(userId);
                     boolean isApproved = b.getStatus() == BookingStatus.APPROVED;
-                    boolean isEnded = b.getEnd().isBefore(LocalDateTime.now().plusHours(3)); // чтобы тесты в ci проходили
-                  //  boolean isEnded = b.getEnd().isBefore(LocalDateTime.now().plusHours(2)); // ровнял полдня таймзоны чтобы в докере тесты когда запускаю сервисы в докере проходили)
+                    boolean isEnded = b.getEnd().isBefore(LocalDateTime.now().plusHours(3));
 
                     log.info("Проверка бронирования {}: isBooker={}, isApproved={}, isEnded={}",
                             b.getId(), isBooker, isApproved, isEnded);
