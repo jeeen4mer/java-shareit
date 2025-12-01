@@ -15,7 +15,7 @@ import ru.practicum.shareit.user.model.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-01T15:20:41+0400",
+    date = "2025-12-01T16:39:31+0400",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.1 (Oracle Corporation)"
 )
 @Component
@@ -69,20 +69,6 @@ public class BookingMapperImpl implements BookingMapper {
         }
 
         return list;
-    }
-
-    @Override
-    public BookingShortDto toBookingShortDto(Booking booking) {
-        if ( booking == null ) {
-            return null;
-        }
-
-        BookingShortDto.BookingShortDtoBuilder bookingShortDto = BookingShortDto.builder();
-
-        bookingShortDto.bookerId( bookingBookerId( booking ) );
-        bookingShortDto.id( booking.getId() );
-
-        return bookingShortDto.build();
     }
 
     @Override
@@ -151,21 +137,6 @@ public class BookingMapperImpl implements BookingMapper {
         itemResponseDto.requestId( item.getRequestId() );
 
         return itemResponseDto.build();
-    }
-
-    private Long bookingBookerId(Booking booking) {
-        if ( booking == null ) {
-            return null;
-        }
-        User booker = booking.getBooker();
-        if ( booker == null ) {
-            return null;
-        }
-        Long id = booker.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
     }
 
     private Long bookingResponseDtoBookerId(BookingResponseDto bookingResponseDto) {

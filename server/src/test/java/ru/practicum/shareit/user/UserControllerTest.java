@@ -83,7 +83,7 @@ public class UserControllerTest {
         when(userService.getAllUsers())
                 .thenReturn(List.of(userDto));
 
-        String result = mockMvc.perform(get("/users")
+        String result = mockMvc.perform(get("/users/")
                         .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
                 .andReturn()

@@ -1,9 +1,10 @@
 package ru.practicum.shareit.user.model;
 
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
