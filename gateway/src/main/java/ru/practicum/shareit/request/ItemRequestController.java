@@ -1,55 +1,42 @@
- package ru.practicum.shareit.request;
+package ru.practicum.shareit.request;
 
- import lombok.RequiredArgsConstructor;
- import org.springframework.http.HttpStatus;
- import org.springframework.http.ResponseEntity;
- import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.request.dto.ItemRequestInDto;
 
- import jakarta.validation.Valid;
- import ru.practicum.shareit.request.dto.CreateItemRequestDto;
- import ru.practicum.shareit.request.dto.ItemRequestDto;
- import ru.practicum.shareit.request.service.ItemRequestService;
+@Validated
+@RestController
+@RequestMapping(path = "/requests")
+@RequiredArgsConstructor
+public class ItemRequestController {
+    private final ItemRequestsClient itemRequestsClient;
 
- import java.util.List;
+    @PostMapping
+    public ResponseEntity<Object> addItemRequest(@RequestBody @Valid ItemRequestInDto itemRequestInDto,
+                                                 @Positive @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return itemRequestsClient.addItemRequest(itemRequestInDto, userId);
+    }
 
- @RestController
- @RequestMapping(path = "/requests")
- @RequiredArgsConstructor
- public class ItemRequestController {
-     private final ItemRequestService itemRequestService;
+    @GetMapping
+    public ResponseEntity<Object> getAllMineRequests(@Positive @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return itemRequestsClient.getAllMineRequests(userId);
+    }
 
-     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
+    @GetMapping("/{requestId}")
+    public ResponseEntity<Object> getItemRequestById(@Positive @RequestHeader("X-Sharer-User-Id") Long userId,
+                                                     @Positive @PathVariable Long requestId) {
+        return itemRequestsClient.getItemRequestById(userId, requestId);
+    }
 
-     @PostMapping
-     @ResponseStatus(HttpStatus.CREATED)
-     public ItemRequestDto createRequest(@Valid @RequestBody CreateItemRequestDto createItemRequestDto,
-                                         @RequestHeader(USER_ID_HEADER) Long userId) {
-         return itemRequestService.createRequest(createItemRequestDto, userId);
-     }
-
-     @GetMapping
-     public List<ItemRequestDto> getUserRequests(@RequestHeader(USER_ID_HEADER) Long userId) {
-         return itemRequestService.getUserRequests(userId);
-     }
-
-     @GetMapping("/all")
-     public List<ItemRequestDto> getOtherUsersRequests(@RequestHeader(USER_ID_HEADER) Long userId,
-                                                       @RequestParam(defaultValue = "0") int from,
-                                                       @RequestParam(defaultValue = "10") int size) {
-         return itemRequestService.getOtherUsersRequests(userId, from, size);
-     }
-
-     @GetMapping("/{requestId}")
-     public ItemRequestDto getRequestById(@PathVariable Long requestId,
-                                          @RequestHeader(USER_ID_HEADER) Long userId) {
-         return itemRequestService.getRequestById(requestId, userId);
-     }
-
-     @ExceptionHandler(RuntimeException.class)
-     public ResponseEntity<String> handleRequestNotFoundException(RuntimeException ex) {
-         if ("Request not found".equals(ex.getMessage())) {
-             return ResponseEntity.notFound().build();
-         }
-         return ResponseEntity.internalServerError().build();
-     }
- }
+    @GetMapping("/all")
+    public ResponseEntity<Object> getAllItemRequests(@Positive @RequestHeader("X-Sharer-User-Id") Long userId,
+                                                     @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                                     @RequestParam(defaultValue = "10") @Min(1) Integer size) {
+        return itemRequestsClient.getAllItemRequests(userId, from, size);
+    }
+}

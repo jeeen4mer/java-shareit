@@ -1,33 +1,28 @@
- package ru.practicum.shareit.booking.mapper;
+package ru.practicum.shareit.booking.mapper;
 
- import org.springframework.stereotype.Component;
- import ru.practicum.shareit.booking.Booking;
- import ru.practicum.shareit.booking.dto.BookingDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.booking.model.Booking;
 
- @Component
- public class BookingMapper {
-     public BookingDto toBookingDto(Booking booking) {
-         if (booking == null) {
-             return null;
-         }
+import java.util.List;
 
-         BookingDto.Booker booker = new BookingDto.Booker(
-                 booking.getBooker().getId(),
-                 booking.getBooker().getName()
-         );
+@Mapper(componentModel = "spring")
+public interface BookingMapper {
 
-         BookingDto.Item item = new BookingDto.Item(
-                 booking.getItem().getId(),
-                 booking.getItem().getName()
-         );
+    @Mapping(source = "bookerId", target = "booker.id")
+    @Mapping(source = "itemId", target = "item.id")
+    Booking toBooking(BookingRequestDto bookingRequestDto);
 
-         return new BookingDto(
-                 booking.getId(),
-                 booking.getStart(),
-                 booking.getEnd(),
-                 booking.getStatus(),
-                 booker,
-                 item
-         );
-     }
- }
+    BookingResponseDto toBookingResponseDto(Booking booking);
+
+    List<BookingResponseDto> toBookingResponseListDto(List<Booking> bookings);
+
+    @Mapping(source = "booker.id", target = "bookerId")
+    BookingShortDto toBookingShortDto(Booking booking);
+
+    @Mapping(source = "booker.id", target = "bookerId")
+    BookingShortDto toBookingShortDtoFromResponse(BookingResponseDto bookingResponseDto);
+}
